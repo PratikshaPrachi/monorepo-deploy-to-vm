@@ -1,3 +1,4 @@
+import type { ServerWebSocket } from "bun";
 import { prismaClient } from "db/client";
 
 Bun.serve({
@@ -10,13 +11,13 @@ Bun.serve({
       return new Response("Upgrade failed", { status: 500 });
     },
     websocket: {
-        message(ws, message) {
+        message(ws : ServerWebSocket, message : string): void {
             prismaClient.user.create({
-                data: {
-                    username: Math.random().toString(),
-                    password: Math.random().toString()
-                }
-            })
+            data: {
+                username: Math.random().toString(),
+                password: Math.random().toString()
+            }
+            });
             ws.send(message);
         },
     },
