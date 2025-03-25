@@ -1,0 +1,24 @@
+name: backend deploy
+on:
+  push:
+    branches: [ main ]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME}}
+          password: ${{ secrets.DOCKER_TOKEN}}
+
+      - name: Build and push the backend Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Docker/Dockerfile.backend
+          push: true
+          tags: PratikshaPrachi/monorepo-deploy-to-vm: ${{ github.sha }}
