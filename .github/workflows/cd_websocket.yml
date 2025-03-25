@@ -1,0 +1,25 @@
+name: cd pipeline for ws
+on:
+  push:
+    branches: [ main ]
+jobs:
+  websocket:
+    build:
+      runs-on: ubuntu-latest
+    steps:
+      - name: Cloning the repo
+        uses: actions/checkout@v3
+
+      - name: login to docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ DOCKER_USERNAME }}
+          password: ${{ DOCKER_TOKEN}}
+
+      - name: build and push to dockerhub
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Docker/Dockerfile.ws
+          push: true
+          tags: partha978/todo-app-ws:${{ github.sha }}

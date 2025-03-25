@@ -1,0 +1,27 @@
+name: Frontend cd pipeline
+on:
+  push:
+    branches: [ main ]
+jobs:
+  websocket:
+    build:
+      runs-on: ubuntu-lastest
+      steps:
+        - name: Checkout the code
+          uses: actions/checkout@v3
+        
+        - name: Docker login
+          uses: docker/login-action@v2
+          with:
+            username : ${{ DOCKER.USERNAME}}
+            password : ${{ DOCKER.TOKEN}}
+
+        - name: Build and push the image to hub
+          uses: docker/build-push-actions@v4
+          with:
+            context: .
+            file: ./Docker/Dockerfile.frontend
+            push: true
+            build-args:
+            - DATABASE_URL:${{ secrets.DATABASE_URL }}
+            tags: partha978/todo-app-frontend:${{ github.sha }}
