@@ -21,4 +21,4 @@ jobs:
           context: .
           file: ./Docker/Dockerfile.backend
           push: true
-          tags: PratikshaPrachi/monorepo-deploy-to-vm: ${{ github.sha }}
+          tags: PratikshaPrachi/monorepo-deploy-to-vm:${{ github.sha }}
