@@ -3,8 +3,8 @@ on:
   push:
     branches: [ main ]
     path:
-    - "apps/web/**"
-    - "Docker/Dockerfile.frontend"
+    - "todo-app/apps/web/**"
+    - "todo-app/Docker/Dockerfile.frontend"
 jobs:
   frontend:
       runs-on: ubuntu-latest
