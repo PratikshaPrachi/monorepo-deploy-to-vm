@@ -5,11 +5,16 @@ const app = express();
 
 app.use(express.json());
 
+interface users {
+  id : string,
+  name : string,
+}
+
 app.get("/users", (req, res) => {
   prismaClient.user.findMany()
-    .then(users => {
+    .then((users: users[]) => {
       res.json(users);
-    })
+    }) 
     .catch(err => {
       res.status(500).json({ error: err.message });
     });
