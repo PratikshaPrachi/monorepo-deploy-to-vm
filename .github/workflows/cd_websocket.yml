@@ -1,57 +1,28 @@
-name: WebSocket CD Pipeline
-
+name: cd pipeline for ws
 on:
   push:
     branches: [main]
-    paths:  # Fixed from 'path' to 'paths'
+    paths:
       - "apps/websocket/**"
       - ".github/workflows/cd_websocket.yml"
       - "Docker/Dockerfile.ws"
-
 jobs:
-  deploy-websocket:
+  websocket:
     runs-on: ubuntu-latest
-    environment: production
-    permissions:
-      contents: read
-      packages: write
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4  # Updated to latest version
-        with:
-          fetch-depth: 0  # Needed for proper commit references
+      - name: Cloning the repo
+        uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        with:
-          driver-opts: network=host
-
-      - name: Login to Docker Hub
+      - name: login to docker
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}  # Consistent naming
-          password: ${{ secrets.DOCKER_HUB_TOKEN }}  # Consistent naming
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Extract metadata for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: partha978/todo-app-ws
-          tags: |
-            type=sha
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-
-      - name: Build and push Docker image
+      - name: build and push to dockerhub
         uses: docker/build-push-action@v4
         with:
-          context: ./apps/websocket  # More specific context
+          context: .
           file: ./Docker/Dockerfile.ws
           push: true
-          tags: ${{ steps.meta.outputs.tags }}  # Using dynamic tags
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64  # Multi-architecture support
+          tags: partha978/todo-app-ws:${{ github.sha }}
