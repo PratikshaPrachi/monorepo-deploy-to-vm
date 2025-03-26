@@ -1,4 +1,4 @@
-name: backend deploy
+name: backend deploy to VM
 on:
   push:
     branches: [main]
