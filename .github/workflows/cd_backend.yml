@@ -27,3 +27,16 @@ jobs:
           file: ./Docker/Dockerfile.backend
           push: true
           tags: partha978/monorepo-deploy-to-vm:${{ github.sha }}
+      
+      - name: Deploy to AWS EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOSTS }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker pull partha978/monorepo-deploy-to-vm:${{ github.sha }}
+            docker stop backend || true
+            docker rm backend || true
+            docker run -d --name backend -p 8080:8080 partha978/monorepo-deploy-to-vm:${{ github.sha }}
