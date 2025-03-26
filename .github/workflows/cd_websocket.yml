@@ -1,14 +1,15 @@
 name: cd pipeline for ws
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     path:
       - "apps/websocket/**"
+      - ".github/workflows/cd_websocket.yml"
       - "Docker/Dockerfile.ws"
 jobs:
   websocket:
-      runs-on: ubuntu-latest
-      steps:
+    runs-on: ubuntu-latest
+    steps:
       - name: Cloning the repo
         uses: actions/checkout@v3
 
