@@ -1,30 +1,48 @@
-name: Frontend cd pipeline
+name: Frontend CD Pipeline
+
 on:
   push:
     branches: [main]
-    path:
+    paths:
       - "apps/web/**"
       - ".github/workflows/cd_frontend.yml"
       - "Docker/Dockerfile.frontend"
-jobs:
-  frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3
 
-      - name: Docker login
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Build and push the image to hub
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: partha978/todo-app-frontend
+          tags: |
+            type=sha
+            type=ref,event=branch
+
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./apps/web
           file: ./Docker/Dockerfile.frontend
           push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            DATABASE_URL:${{ secrets.DATABASE_URL }}
-          tags: partha978/todo-app-frontend:${{ github.sha }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            NODE_ENV=production
