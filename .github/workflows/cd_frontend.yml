@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     path:
-    - "web/**"
+    - "apps/web/**"
     - "Docker/Dockerfile.frontend"
 jobs:
   frontend:
