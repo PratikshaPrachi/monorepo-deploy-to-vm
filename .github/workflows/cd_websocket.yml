@@ -4,17 +4,16 @@ on:
     branches: [ main ]
 jobs:
   websocket:
-    build:
       runs-on: ubuntu-latest
-    steps:
+      steps:
       - name: Cloning the repo
         uses: actions/checkout@v3
 
       - name: login to docker
         uses: docker/login-action@v2
         with:
-          username: ${{ DOCKER_USERNAME }}
-          password: ${{ DOCKER_TOKEN}}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: build and push to dockerhub
         uses: docker/build-push-action@v4
