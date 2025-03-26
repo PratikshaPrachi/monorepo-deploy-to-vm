@@ -28,6 +28,9 @@ jobs:
           push: true
           tags: partha978/monorepo-deploy-to-vm:${{ github.sha }}
       
+      - name: Debug SSH Variables
+        run: echo "Host is ${{ secrets.SSH_HOST }}, User is ${{ secrets.SSH_USER }}"
+
       - name: Deploy to AWS EC2 via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
