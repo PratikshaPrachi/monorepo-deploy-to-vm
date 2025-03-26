@@ -2,6 +2,9 @@ name: backend deploy
 on:
   push:
     branches: [ main ]
+    path:
+      - "apps/backend/**"
+      - "Docker/Dockerfile.backend"
 jobs:
   backend:
     runs-on: ubuntu-latest

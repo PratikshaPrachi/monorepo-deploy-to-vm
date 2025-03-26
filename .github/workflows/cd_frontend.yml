@@ -2,6 +2,9 @@ name: Frontend cd pipeline
 on:
   push:
     branches: [ main ]
+    path:
+    - "apps/web/**"
+    - "Docker/Dockerfile.frontend"
 jobs:
   frontend:
       runs-on: ubuntu-latest
