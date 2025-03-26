@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     path:
-      - "apps/backend/**"
+      - "backend/**"
       - "Docker/Dockerfile.backend"
 jobs:
   backend:

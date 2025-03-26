@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     path:
-      - "apps/websocket/**"
+      - "websocket/**"
       - "Docker/Dockerfile.ws"
 jobs:
   websocket:
