@@ -2,7 +2,7 @@ name: cd pipeline for ws
 on:
   push:
     branches: [ main ]
-     path:
+    path:
       - "apps/websocket/**"
       - "Docker/Dockerfile.ws"
 jobs:
